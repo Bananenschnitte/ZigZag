@@ -13,7 +13,9 @@ public class CharacterController : MonoBehaviour {
 	/// <summary>
 	/// The Speed of the Characters Movement
 	/// </summary>
-	public float speed = 3.0f;
+	public float speed = 2.0f;
+    public Transform rayStart;
+    public GameObject CrystalEffect;
 
 	private Rigidbody rb;
 	private Animator anim;
@@ -27,7 +29,7 @@ public class CharacterController : MonoBehaviour {
 	/// 
 	/// Initializes the Controller
 	/// </summary>
-	void Start () {
+	private void Start() {
 		rb = GetComponent<Rigidbody>();
 		anim = GetComponent<Animator>();
 	}
@@ -40,54 +42,77 @@ public class CharacterController : MonoBehaviour {
 	///  - handles the input of the player
 	///  - plays the animation of the character
 	/// </summary>
-	void Update () {
-		//	Check if game has started
-		//	@TODO
+	private void Update() {
 
-		//	Check if character falls
-		CheckGroundSate();
+        //	Check if game has started
+        if (GameManager.Instance.isGameStarted) {            
 
-		//	Handle Players Input
-		HandleInput();
+            //	Check if character is grounded / has to fall
+            GetIsGrounded();
 
-		//	Movement
-		Movement();	
+            //	Handle Players Input
+            HandleInput();
 
-		//	Set Animations
-		Animate();
+            //  Check if Character dies
+            HandleDeath();
+
+            //	Set Animations
+            Animate();
+        } else {
+            StartGame();
+        }
 	}
 
-	/// <summary>
-	/// Checks if the player presses the Space-Bar.
-	/// If so, the rotation of the player switches on 90°.
-	/// </summary>
-	private void HandleInput () {
-		//	If Player presses 'Spacebar' the character should turn 90°
-		if (Input.GetKeyDown("Space")) {
-			isFacingRight = !isFacingRight;
+    private void FixedUpdate() {
+        if (GameManager.Instance.isGameStarted) {
+            Move();
+        }
+    }
+
+    /// <summary>
+    /// Checks if the player presses the Space-Bar.
+    /// If so, the rotation of the player switches on 90°.
+    /// </summary>
+    private void HandleInput() {
+		if (Input.GetKeyDown(KeyCode.Space)) {
+            Switch();
 		}
 	}
 
 	/// <summary>
 	/// Walks / Pushes the character forwards, depedingung on the rotation.
 	/// </summary>
-	private void Movement () {
-		//	@TODO
+	private void Move() {        
+        rb.transform.position = transform.position + transform.forward * speed * Time.deltaTime;        
 	}
+
+    /// <summary>
+    /// Swtiches the Direction 
+    /// </summary>
+    private void Switch() {
+        isFacingRight = !isFacingRight;
+
+        if (isFacingRight) {
+            transform.rotation = Quaternion.Euler(0, 45, 0);
+        } else {
+            transform.rotation = Quaternion.Euler(0, -45, 0);
+        }
+    }
 
 	/// <summary>
 	/// Sets the Paramters of the Animater-Controller
 	/// </summary>
-	private void Animate () {
-		//	@TODO
+	private void Animate() {
+        anim.SetBool("isGrounded", isGrounded);
 	}
 
 	/// <summary>
 	/// Checks if the Character is grounded.
 	/// Casts an Array downwards to check if Ground is below the player
 	/// </summary>
-	private void CheckGroundSate () {
-
+	private void GetIsGrounded() {
+        RaycastHit hit;
+        Physics.Raycast(rayStart.position, -transform.up, out hit, 3);        
 	}
 
 	/// <summary>
@@ -95,21 +120,45 @@ public class CharacterController : MonoBehaviour {
 	/// 
 	/// It's used to recognize the collision of Crystals for Scoring.
 	/// </summary>
-	/// <param name="collider">The Collider of the hit object</param>
-	void OnTriggerEnter(Collider collider) {
-		//	Is Collider a Crystal?
+	/// <param name="other">The Collider of the hit object</param>
+	public void OnTriggerEnter(Collider other) {
 
-		//	Trigger Scoring
+		//	Is Collider a Crystal?
+        if (other.tag == "Crystal") {
+            
+    		//  Increase the Scoring
+            GameManager.Instance.Score();
+
+            //  Trigger Crystal Effect
+            GameObject g = Instantiate(CrystalEffect, transform.position, Quaternion.identity);
+            Destroy(g, 2);
+
+            //  Destroy the Crystal (make it disappear)
+            Destroy(other.gameObject, 0.1f);
+        }
+
 	}
 
 	/// <summary>
 	/// Handles when the Player dies and what happens after Death
 	/// </summary>
-	private void HandleDeath () {
-		// TODO: Check if Players y-Position is lower 2 --> dead
+	private void HandleDeath() {
 
-		// TODO: Trigger Death-Method of GameManager --> Reload Scene
+		//  Check if Players y-Position is lower 2 --> dead
+        if (transform.position.y < -2) {
+
+		    //  Trigger Death-Method of GameManager --> Reload Scene
+            GameManager.Instance.RestartGame();
+        }
+
 	}
+
+    private void StartGame() {
+        if (Input.GetKeyDown(KeyCode.Return)) {
+            GameManager.Instance.StartGame();
+            anim.SetTrigger("gameStarted");
+        }
+    }
 
 
 }
