@@ -4,6 +4,9 @@ using UnityEngine;
 
 /// <summary>
 /// Expands continously the Level
+/// 
+/// @IDEA: Only creaete 1 Fix block, and on start create the first X-Blocks and only after them create it frequently
+/// @IDEA: Change the Chrystal-Frequency to a percentage change to spawn with a block. so it would be more random
 /// </summary>
 public class LevelCreation : MonoBehaviour {
 

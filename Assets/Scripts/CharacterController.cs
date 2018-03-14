@@ -42,8 +42,10 @@ public class CharacterController : MonoBehaviour {
 	/// </summary>
 	void Update () {
 		//	Check if game has started
+		//	@TODO
 
 		//	Check if character falls
+		CheckGroundSate();
 
 		//	Handle Players Input
 		HandleInput();
@@ -84,7 +86,7 @@ public class CharacterController : MonoBehaviour {
 	/// Checks if the Character is grounded.
 	/// Casts an Array downwards to check if Ground is below the player
 	/// </summary>
-	private void CheckGroundSate() {
+	private void CheckGroundSate () {
 
 	}
 
@@ -98,6 +100,15 @@ public class CharacterController : MonoBehaviour {
 		//	Is Collider a Crystal?
 
 		//	Trigger Scoring
+	}
+
+	/// <summary>
+	/// Handles when the Player dies and what happens after Death
+	/// </summary>
+	private void HandleDeath () {
+		// TODO: Check if Players y-Position is lower 2 --> dead
+
+		// TODO: Trigger Death-Method of GameManager --> Reload Scene
 	}
 
 
