@@ -14,8 +14,18 @@ public class CharacterController : MonoBehaviour {
 	/// The Speed of the Characters Movement
 	/// </summary>
 	public float speed = 2.0f;
+
+	/// <summary>
+	/// The Starting-Point for the Ray-Cast using to determine if the Character is grounded
+	/// </summary>
     public Transform rayStart;
+
+	/// <summary>
+	/// The Particel-Effect intantiate if a Crystal is collected
+	/// </summary>
     public GameObject CrystalEffect;
+
+	//-------------------------------------------------------------
 
 	private Rigidbody rb;
 	private Animator anim;
@@ -63,7 +73,14 @@ public class CharacterController : MonoBehaviour {
         }
 	}
 
+	/// <summary>
+	/// Is called every fixed framerate frame.
+	/// 
+	/// Its used to move the Character
+	/// </summary>
     private void FixedUpdate() {
+
+		//	Only if the Game has started
         if (GameManager.Instance.isGameStarted) {
             Move();
         }
@@ -74,6 +91,8 @@ public class CharacterController : MonoBehaviour {
     /// If so, the rotation of the player switches on 90°.
     /// </summary>
     private void HandleInput() {
+
+		//	Only if the user has pressed the Space-Bar
 		if (Input.GetKeyDown(KeyCode.Space)) {
             Switch();
 		}
@@ -113,6 +132,8 @@ public class CharacterController : MonoBehaviour {
 	private void GetIsGrounded() {
         RaycastHit hit;
         Physics.Raycast(rayStart.position, -transform.up, out hit, 3);        
+
+		//@todo recegnition not working probably
 	}
 
 	/// <summary>
@@ -143,7 +164,7 @@ public class CharacterController : MonoBehaviour {
 	/// Handles when the Player dies and what happens after Death
 	/// </summary>
 	private void HandleDeath() {
-
+		
 		//  Check if Players y-Position is lower 2 --> dead
         if (transform.position.y < -2) {
 
@@ -153,7 +174,12 @@ public class CharacterController : MonoBehaviour {
 
 	}
 
+	/// <summary>
+	/// Starts the Game if the User Presses Return
+	/// </summary>
     private void StartGame() {
+
+		//	Only if the USer presses Return
         if (Input.GetKeyDown(KeyCode.Return)) {
             GameManager.Instance.StartGame();
             anim.SetTrigger("gameStarted");

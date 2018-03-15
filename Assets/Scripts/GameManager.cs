@@ -10,7 +10,6 @@ using UnityEngine.SceneManagement;
 ///  - current Score
 ///  - best Highscore
 /// and has public methods such as hit Crystal
-/// 
 /// </summary>
 public class GameManager : MonoBehaviour {
 
@@ -36,6 +35,10 @@ public class GameManager : MonoBehaviour {
 	private int currentScore = 0;
 	private int highScore = 0;
 
+    /// <summary>
+    /// Is called when the script instance is being loaded.
+    /// Its used for singleton
+    /// </summary>
     private void Awake() {
         if (Instance == null) {
             Instance = this;
@@ -96,6 +99,10 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(0);
     }
 
+    /// <summary>
+    /// Gets the current Highscore
+    /// </summary>
+    /// <returns>The Current Highscore</returns>
     public int GetHighScore() {
         return PlayerPrefs.GetInt("Highscore");
     }
