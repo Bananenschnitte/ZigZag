@@ -30,16 +30,26 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public bool isGameStarted { get; private set; }
 
-    // -----------------------------------------------------------
+    /// <summary>
+    /// Crystals the player has to score to reach the next difficulty --> increses the speed
+    /// </summary>
+    public int difficutlyIncreaseStep = 10;
 
+    // -----------------------------------------------------------
+        
 	private int currentScore = 0;
 	private int highScore = 0;
+    private AudioSource music;
+    private AudioSource sfx_crystal;
+    private AudioSource sfx_gameOver;
+    private LevelCreation levelCreation;
+    private int nextDifficutly = 10;
 
     /// <summary>
     /// Is called when the script instance is being loaded.
     /// Its used for singleton
     /// </summary>
-    private void Awake() {
+    private void Awake () {
         if (Instance == null) {
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -48,29 +58,55 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    private void Start () {
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        foreach (AudioSource a in audioSources) {
+            
+            Debug.Log("AudioSource: " + a.clip.name);
+            if (a.clip.name.Contains("coin")) {
+                sfx_crystal = a;
+            }
+
+            if (a.clip.name.Contains("music")) {
+                music = a;
+            }
+
+            if (a.clip.name.Contains("over")) {
+                sfx_gameOver = a;
+            }
+        }
+
+        levelCreation = FindObjectOfType<LevelCreation>();
+        nextDifficutly = difficutlyIncreaseStep;
+    }
+
     /// <summary>
     /// Starts the game.
     /// 
     /// Sets Variable 'isGameStarted' to true.
     /// Starts playing the background-Music
     /// </summary>
-    public void StartGame() {
+    public void StartGame () {
         isGameStarted = true;
 		StartPlayMusic();
+
+        
+        
+        levelCreation.StartBuilding();
 	}
 
 	/// <summary>
 	/// Start playing Music (if not already)
 	/// </summary>
 	private void StartPlayMusic() {
-		// @TODO
+        music.Play();
 	}
 
 	/// <summary>
 	/// Should be called when Player Scores by hitting a Crystal.
 	/// Counts the current Score +1, and updates the Score-Texts
 	/// </summary>
-	public void Score() {
+	public void Score () {
 		currentScore++;
 		text_currentScore.text = currentScore.ToString();
 
@@ -82,6 +118,15 @@ public class GameManager : MonoBehaviour {
             //  Save the Highscore
             PlayerPrefs.SetInt("Highscore", currentScore);
 
+            //  Play scroing Sound
+            sfx_crystal.Play();
+
+            //  Increase Speed of Player if player hits the next score-level
+            if (currentScore >= nextDifficutly) {
+                nextDifficutly += difficutlyIncreaseStep;
+                PlayerController.Instance.IncreaseSpeed();
+            }
+
 			// may trigger special partivle effect to indicate that the highscore is reached
 			// or change the color of the scoring particel effect
 		}
@@ -91,19 +136,22 @@ public class GameManager : MonoBehaviour {
     /// <summary>
     /// Restarts the Game
     /// </summary>
-    public void RestartGame() {
+    public void RestartGame () {
         //  Set Game on not started
         isGameStarted = false;
 
         //  Reload the Scene
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(0);        
+
+        //  Play Death Sound
+        sfx_gameOver.Play();        
     }
 
     /// <summary>
     /// Gets the current Highscore
     /// </summary>
     /// <returns>The Current Highscore</returns>
-    public int GetHighScore() {
+    public int GetHighScore () {
         return PlayerPrefs.GetInt("Highscore");
     }
 }
