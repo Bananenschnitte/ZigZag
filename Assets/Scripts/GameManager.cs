@@ -12,23 +12,23 @@ using UnityEngine.SceneManagement;
 /// and has public methods such as hit Crystal
 /// </summary>
 public class GameManager : MonoBehaviour {
-
+    
     public static GameManager Instance { get; private set; }
 
     /// <summary>
     /// The UI-Text to show the current Score
     /// </summary>
     public Text text_currentScore;
-
+    
     /// <summary>
     /// The UI-Text for the best highscore
     /// </summary>
     public Text text_highScore;
-
+    
     /// <summary>
     /// Indicates if the Game has started due to the Player
     /// </summary>
-    public bool isGameStarted { get; private set; }
+    public bool IsGameStarted { get; private set; }
 
     /// <summary>
     /// Crystals the player has to score to reach the next difficulty --> increses the speed
@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour {
 
     // -----------------------------------------------------------
         
-	private int currentScore = 0;
-	private int highScore = 0;
+    private int currentScore = 0;
+    private int highScore = 0;
     private AudioSource music;
     private AudioSource sfx_crystal;
     private AudioSource sfx_gameOver;
