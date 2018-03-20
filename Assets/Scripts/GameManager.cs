@@ -87,11 +87,8 @@ public class GameManager : MonoBehaviour {
     /// Starts playing the background-Music
     /// </summary>
     public void StartGame () {
-        isGameStarted = true;
-		StartPlayMusic();
-
-        
-        
+        IsGameStarted = true;
+        StartPlayMusic();
         levelCreation.StartBuilding();
 	}
 
@@ -107,13 +104,13 @@ public class GameManager : MonoBehaviour {
 	/// Counts the current Score +1, and updates the Score-Texts
 	/// </summary>
 	public void Score () {
-		currentScore++;
-		text_currentScore.text = currentScore.ToString();
+        currentScore++;
+        text_currentScore.text = currentScore.ToString();
 
-		if (currentScore > highScore) {
+        if (currentScore > highScore) {
 
             //  Display the new Highscore
-			text_highScore = text_currentScore;
+            text_highScore = text_currentScore;
 
             //  Save the Highscore
             PlayerPrefs.SetInt("Highscore", currentScore);
@@ -138,7 +135,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public void RestartGame () {
         //  Set Game on not started
-        isGameStarted = false;
+        IsGameStarted = false;
 
         //  Reload the Scene
         SceneManager.LoadScene(0);        
