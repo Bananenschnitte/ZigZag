@@ -17,14 +17,14 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     public float speed = 2.0f;
 
-	/// <summary>
-	/// The Starting-Point for the Ray-Cast using to determine if the Character is grounded
-	/// </summary>
+    /// <summary>
+    /// The Starting-Point for the Ray-Cast using to determine if the Character is grounded
+    /// </summary>
     public Transform rayStart;
 
-	/// <summary>
-	/// The Particel-Effect intantiate if a Crystal is collected
-	/// </summary>
+    /// <summary>
+    /// The Particel-Effect intantiate if a Crystal is collected
+    /// </summary>
     public GameObject CrystalEffect;
 
     /// <summary>
@@ -33,13 +33,13 @@ public class PlayerController : MonoBehaviour {
     public LayerMask groundLayer;
 
 
-	//-------------------------------------------------------------
+    //-------------------------------------------------------------
 
     private AudioSource dieSound;
-	private Rigidbody rb;
-	private Animator anim;
-	private bool isFacingRight = true;
-	private bool isGrounded = false;
+    private Rigidbody rb;
+    private Animator anim;
+    private bool isFacingRight = true;
+    private bool isGrounded = false;
 
 
     private void Awake () {
@@ -58,23 +58,23 @@ public class PlayerController : MonoBehaviour {
     /// Initializes the Controller
     /// </summary>
     private void Start () {
-		rb = GetComponent<Rigidbody>();
-		anim = GetComponent<Animator>();
+	    rb = GetComponent<Rigidbody>();
+	    anim = GetComponent<Animator>();
         dieSound = GetComponent<AudioSource>();
-	}
+    }
 	
-	/// <summary>
-	/// Update is called every frame, if the MonoBehaviour is enabled.
-	/// 
-	///  - Only runs if game has started
-	///  - Checks if Character is grounden. If not grounded he is not allowed to move and play the fall-animation
-	///  - handles the input of the player
-	///  - plays the animation of the character
-	/// </summary>
-	private void Update () {
+    /// <summary>
+    /// Update is called every frame, if the MonoBehaviour is enabled.
+    /// 
+    ///  - Only runs if game has started
+    ///  - Checks if Character is grounden. If not grounded he is not allowed to move and play the fall-animation
+    ///  - handles the input of the player
+    ///  - plays the animation of the character
+    /// </summary>
+    private void Update () {
 
         //	Check if game has started
-        if (GameManager.Instance.isGameStarted) {            
+        if (GameManager.Instance.IsGameStarted) {            
 
             //	Check if character is grounded / has to fall
             GetIsGrounded();
@@ -90,17 +90,17 @@ public class PlayerController : MonoBehaviour {
         } else {
             StartGame();
         }
-	}
+    }
 
-	/// <summary>
-	/// Is called every fixed framerate frame.
-	/// 
-	/// Its used to move the Character
-	/// </summary>
+    /// <summary>
+    /// Is called every fixed framerate frame.
+    /// 
+    /// Its used to move the Character
+    /// </summary>
     private void FixedUpdate () {
 
-		//	Only if the Game has started
-        if (GameManager.Instance.isGameStarted) {
+	    //	Only if the Game has started
+        if (GameManager.Instance.IsGameStarted) {
             Move();
         }
     }
@@ -111,18 +111,18 @@ public class PlayerController : MonoBehaviour {
     /// </summary>
     private void HandleInput () {
 
-		//	Only if the user has pressed the Space-Bar
-		if (Input.GetKeyDown(KeyCode.Space)) {
+	    //	Only if the user has pressed the Space-Bar
+	    if (Input.GetKeyDown(KeyCode.Space)) {
             Switch();
-		}
-	}
+	    }
+    }
 
-	/// <summary>
-	/// Walks / Pushes the character forwards, depedingung on the rotation.
-	/// </summary>
-	private void Move () {        
+    /// <summary>
+    /// Walks / Pushes the character forwards, depedingung on the rotation.
+    /// </summary>
+    private void Move () {        
         rb.transform.position = transform.position + transform.forward * speed * Time.deltaTime;        
-	}
+    }
 
     /// <summary>
     /// Swtiches the Direction 
@@ -137,36 +137,36 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-	/// <summary>
-	/// Sets the Paramters of the Animater-Controller
-	/// </summary>
-	private void Animate () {
+    /// <summary>
+    /// Sets the Paramters of the Animater-Controller
+    /// </summary>
+    private void Animate () {
         anim.SetBool("isGrounded", isGrounded);
-	}
+    }
 
-	/// <summary>
-	/// Checks if the Character is grounded.
-	/// Casts an Array downwards to check if Ground is below the player
-	/// </summary>
-	private void GetIsGrounded () {
+    /// <summary>
+    /// Checks if the Character is grounded.
+    /// Casts an Array downwards to check if Ground is below the player
+    /// </summary>
+    private void GetIsGrounded () {
         RaycastHit hit;
         isGrounded = Physics.Raycast(rayStart.position, -transform.up, out hit, 1000, groundLayer.value);        
         
-		//@todo recegnition not working probably
-	}
+	    //@todo recegnition not working probably
+    }
 
-	/// <summary>
-	/// Is called when the Collider other enters the trigger.
-	/// 
-	/// It's used to recognize the collision of Crystals for Scoring.
-	/// </summary>
-	/// <param name="other">The Collider of the hit object</param>
-	public void OnTriggerEnter (Collider other) {
+    /// <summary>
+    /// Is called when the Collider other enters the trigger.
+    /// 
+    /// It's used to recognize the collision of Crystals for Scoring.
+    /// </summary>
+    /// <param name="other">The Collider of the hit object</param>
+    public void OnTriggerEnter (Collider other) {
 
-		//	Is Collider a Crystal?
+	    //	Is Collider a Crystal?
         if (other.tag == "Crystal") {
             
-    		//  Increase the Scoring
+    	    //  Increase the Scoring
             GameManager.Instance.Score();
 
             //  Trigger Crystal Effect
@@ -177,14 +177,14 @@ public class PlayerController : MonoBehaviour {
             Destroy(other.gameObject, 0.1f);
         }
 
-	}
+    }
 
-	/// <summary>
-	/// Handles when the Player dies and what happens after Death
-	/// </summary>
-	private void HandleDeath () {
+    /// <summary>
+    /// Handles when the Player dies and what happens after Death
+    /// </summary>
+    private void HandleDeath () {
 		
-		//  Check if Players y-Position is lower 2 --> dead
+	    //  Check if Players y-Position is lower 2 --> dead
         if (transform.position.y < -4) {
 
             //  Play Death-Sound
@@ -194,14 +194,14 @@ public class PlayerController : MonoBehaviour {
             GameManager.Instance.RestartGame();
         }
 
-	}
+    }
 
-	/// <summary>
-	/// Starts the Game if the User Presses Return
-	/// </summary>
+    /// <summary>
+    /// Starts the Game if the User Presses Return
+    /// </summary>
     private void StartGame () {
 
-		//	Only if the User presses Return
+	    //	Only if the User presses Return
         if (Input.GetKeyDown(KeyCode.Return)) {
             GameManager.Instance.StartGame();
             anim.SetTrigger("gameStarted");

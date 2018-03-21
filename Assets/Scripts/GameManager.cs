@@ -90,20 +90,20 @@ public class GameManager : MonoBehaviour {
         IsGameStarted = true;
         StartPlayMusic();
         levelCreation.StartBuilding();
-	}
+    }
 
-	/// <summary>
-	/// Start playing Music (if not already)
-	/// </summary>
-	private void StartPlayMusic() {
+    /// <summary>
+    /// Start playing Music (if not already)
+    /// </summary>
+    private void StartPlayMusic() {
         music.Play();
-	}
+    }
 
-	/// <summary>
-	/// Should be called when Player Scores by hitting a Crystal.
-	/// Counts the current Score +1, and updates the Score-Texts
-	/// </summary>
-	public void Score () {
+    /// <summary>
+    /// Should be called when Player Scores by hitting a Crystal.
+    /// Counts the current Score +1, and updates the Score-Texts
+    /// </summary>
+    public void Score () {
         currentScore++;
         text_currentScore.text = currentScore.ToString();
 
@@ -124,11 +124,11 @@ public class GameManager : MonoBehaviour {
                 PlayerController.Instance.IncreaseSpeed();
             }
 
-			// may trigger special partivle effect to indicate that the highscore is reached
-			// or change the color of the scoring particel effect
-		}
+		    // may trigger special partivle effect to indicate that the highscore is reached
+		    // or change the color of the scoring particel effect
+	    }
 		
-	}
+    }
 
     /// <summary>
     /// Restarts the Game

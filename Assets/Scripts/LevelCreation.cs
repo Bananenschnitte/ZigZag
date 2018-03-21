@@ -10,21 +10,21 @@ using UnityEngine;
 /// </summary>
 public class LevelCreation : MonoBehaviour {
 
-	/// <summary>
-	/// Template of the Block used to create the Level
-	/// </summary>
-	public GameObject templatePathBrick;
+    /// <summary>
+    /// Template of the Block used to create the Level
+    /// </summary>
+    public GameObject templatePathBrick;
 
-	/// <summary>
-	/// The Rate how many Path-Parts are Created in a secons. (Lower value is faster creation)
-	/// </summary>
-	public float creationRate = 0.5f;    
+    /// <summary>
+    /// The Rate how many Path-Parts are Created in a secons. (Lower value is faster creation)
+    /// </summary>
+    public float creationRate = 0.5f;    
 
-	/// <summary>
-	/// Frequency the Cristal will spawn with the Blocks. 
-	/// (e.g: 5 means every 5th block has a Crystal)
-	/// </summary>
-	public int chrystalFrequency = 5;
+    /// <summary>
+    /// Frequency the Cristal will spawn with the Blocks. 
+    /// (e.g: 5 means every 5th block has a Crystal)
+    /// </summary>
+    public int chrystalFrequency = 5;
 
     /// <summary>
     /// Amount of Cubes, created on Start for the Level
@@ -36,13 +36,13 @@ public class LevelCreation : MonoBehaviour {
     private Vector3 lastPosition;
 
     private void Start () {
-		if (templatePathBrick == null) {
-			Debug.LogError("[LevelCreation] No Prefab set to 'templatePathBrick'");
-		}
+	    if (templatePathBrick == null) {
+		    Debug.LogError("[LevelCreation] No Prefab set to 'templatePathBrick'");
+	    }
 
-		if (lastPosition == null) {
-			Debug.LogError("[LevelCreation] No 'lastPosition' is set");
-		}
+	    if (lastPosition == null) {
+		    Debug.LogError("[LevelCreation] No 'lastPosition' is set");
+	    }
 
         //  Create Initial Path
         CreateInitialLevel();
@@ -78,7 +78,7 @@ public class LevelCreation : MonoBehaviour {
         if (roadCount % 5 == 0) {
             go.transform.GetChild(0).gameObject.SetActive(true);
         }
-	}
+    }
 
     /// <summary>
     /// Creates the Initial-Level. (As far as the player can see). 
